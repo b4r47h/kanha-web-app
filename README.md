@@ -2,7 +2,7 @@
 
 A poetic AI chat and audio experience with Krishna as your guide. Built using modern web technologies with integrated ElevenLabs TTS, audio recording(broken), and beautifully styled UI.
 
-![Link](https://kanha-app.vercel.app/)
+https://kanha-app.vercel.app/
 
 ---
 
@@ -38,5 +38,5 @@ A poetic AI chat and audio experience with Krishna as your guide. Built using mo
 ### 1. Clone the project
 
 ```bash
-git clone https://github.com/yourusername/krishna-counsel.git
-cd krishna-counsel
+git clone https://github.com/yourusername/kanha-web-app.git
+cd kanha-web-app
