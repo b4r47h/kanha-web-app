@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ChatForm } from '@/components/custom/chat-form';
 
+
 export default function Home() {
   const [message, setMessage] = useState('');
   const [response, setResponse] = useState('');
