@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: " Krishna&apos;s Divine Counsel",
+  title: " Krishna's Divine Counsel",
   description: "Ask Krishna your deepest questions and receive divine guidance.",
 };
 
