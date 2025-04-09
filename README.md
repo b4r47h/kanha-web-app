@@ -2,7 +2,7 @@
 
 A poetic AI chat and audio experience with Krishna as your guide. Built using modern web technologies with integrated ElevenLabs TTS, audio recording(broken), and beautifully styled UI.
 
-![Screenshot](public/preview.png)
+![Link](https://kanha-app.vercel.app/)
 
 ---
 
