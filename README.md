@@ -1,6 +1,6 @@
 # 🕉️ Krishna's Divine Counsel
 
-A poetic AI chat and audio experience with Krishna as your guide. Built using modern web technologies with integrated ElevenLabs TTS, audio recording, and beautifully styled UI.
+A poetic AI chat and audio experience with Krishna as your guide. Built using modern web technologies with integrated ElevenLabs TTS, audio recording(broken), and beautifully styled UI.
 
 ![Screenshot](public/preview.png)
 
