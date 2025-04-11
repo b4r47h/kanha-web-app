@@ -121,68 +121,62 @@ You are ever My flute, played by the breath of the Divine. ॐ शान्त�
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream);
-      let chunks: Blob[] = [];
+      const chunks: Blob[] = [];
   
-      recorder.ondataavailable = (event) => chunks.push(event.data);
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          chunks.push(event.data);
+        }
+      };
   
-      setRecordedChunks([]); // reset old data
+      recorder.onstop = async () => {
+        setIsRecording(false);
+        const audioBlob = new Blob(chunks, { type: 'audio/webm' });
+        setRecordedAudio(audioBlob);
   
-      recorder.onstop = () => {
-        setRecordedChunks(chunks);
+        const formData = new FormData();
+        formData.append('file', audioBlob, 'voice.webm');
+  
+        try {
+          const res = await fetch('/api/transcribe', {
+            method: 'POST',
+            body: formData,
+          });
+  
+          const data = await res.json();
+  
+          if (!res.ok) throw new Error(data.error || 'Failed to transcribe');
+  
+          const promptFromVoice = data.transcript;
+          setMessage(promptFromVoice); // fill text box
+          await handleChatSubmitFromVoice(promptFromVoice);
+        } catch (err) {
+          console.error('Transcription Error:', err);
+          setResponse("The sound was lost in the ether. Try again, dear one.");
+          setIsOutputActive(true);
+        }
       };
   
       recorder.start();
       setMediaRecorder(recorder);
       setIsRecording(true);
   
-      // Optional: Stop automatically after 10 seconds
       setTimeout(() => {
         if (recorder.state === 'recording') {
           recorder.stop();
-          setIsRecording(false);
         }
       }, 10000);
+  
     } catch (error) {
       console.error("Microphone error:", error);
     }
   };
   
-
   const stopRecording = () => {
-    if (!mediaRecorder || !isRecording) return;
-  
-    mediaRecorder.onstop = async () => {
-      setIsRecording(false);
-      const audioBlob = new Blob(recordedChunks, { type: 'audio/webm' });
-      setRecordedAudio(audioBlob);
-  
-      const formData = new FormData();
-      formData.append('file', audioBlob, 'voice.webm');
-  
-      try {
-        const res = await fetch('/api/transcribe', {
-          method: 'POST',
-          body: formData,
-        });
-  
-        const data = await res.json();
-  
-        if (!res.ok) throw new Error(data.error || 'Failed to transcribe');
-  
-        const promptFromVoice = data.transcript;
-        setMessage(promptFromVoice);
-        await handleChatSubmitFromVoice(promptFromVoice);
-      } catch (err) {
-        console.error('Transcription Error:', err);
-        setResponse("The sound was lost in the ether. Try again, dear one.");
-        setIsOutputActive(true);
-      }
-    };
-  
-    mediaRecorder.stop();
+    if (!mediaRecorder || mediaRecorder.state !== 'recording') return;
+    mediaRecorder.stop(); // onstop is already handled
   };
   
-
   const textToSpeechElevenLabs = async (text: string) => {
     try {
       setTtsLoading(true);
@@ -227,7 +221,7 @@ You are ever My flute, played by the breath of the Divine. ॐ शान्त�
     <main className={`min-h-screen p-4 ${isOutputActive ? 'gradient-flowing' : 'gradient-static'}`}>
       <div className="max-w-4xl mx-auto">
         <header className="mb-6">
-          <h1 className="text-4xl font-bold text-white text-shadow"> Krishna&apos;s Divine Counsel</h1>
+          <h1 className="text-4xl font-bold text-primary text-shadow"> Krishna&apos;s Divine Counsel</h1>
           <div className="mt-4 flex justify-end">
             <Button
               onClick={isRecording ? stopRecording : startRecording}
@@ -274,7 +268,7 @@ You are ever My flute, played by the breath of the Divine. ॐ शान्त�
           )}
         </div>
 
-        <footer className="mt-10 text-center text-white/80 text-sm py-4">
+        <footer className="mt-10 text-center text-primary text-sm py-4">
           <p>Free tier offering. Pause between calls, for My flute plays softly. ॐ</p>
         </footer>
       </div>
