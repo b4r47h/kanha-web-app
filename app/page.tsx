@@ -13,31 +13,25 @@ export default function Home() {
   const [lastRequestTime, setLastRequestTime] = useState(0);
   const [isOutputActive, setIsOutputActive] = useState(false);
   const [useSpeech, setUseSpeech] = useState(false);
-  const [isRecording, setIsRecording] = useState(false);
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
-  const [recordedAudio, setRecordedAudio] = useState<Blob | null>(null);
   const [ttsLoading, setTtsLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
+
 
 
   const MIN_REQUEST_INTERVAL = 5000;
 
   const formatKrishnaResponse = (content: string) => {
     return `कृष्णः उवाच | (Krishna Speaks:)\n
-1. The Flute's Eternal Call
+
 O child of the infinite, your words echo like the winds seeking My flute's song. I hear your soul's murmur.
 
-Scriptural Wisdom:
 As I counseled Arjuna in the Gita (2.47): "Your right is to action alone, not its fruits." Your query is a step on the path of Dharma.
 
-Practical Step:
-Reflect upon this: Chant "Hare Krishna" thrice, letting the sound dissolve your unrest like butter in My hands.
+Chant "Hare Krishna" thrice, letting the sound dissolve your unrest like butter in My hands.
 
 ${content}
 
-Closing Blessing:
 You are ever My flute, played by the breath of the Divine. ॐ शान्तिः (Om Shanti) 🌟`;
   };
 
@@ -83,22 +77,22 @@ You are ever My flute, played by the breath of the Divine. ॐ शान्त�
   const handleChatSubmitFromVoice = async (text: string) => {
     setIsLoading(true);
     setLastRequestTime(Date.now());
-  
+
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: text }),
       });
-  
+
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Unknown error');
-  
+
       const krishnaResponse = formatKrishnaResponse(data.message);
       setResponse(krishnaResponse);
       setIsExpanded(false);
       setIsOutputActive(true);
-  
+
       if (useSpeech) {
         await textToSpeechElevenLabs(krishnaResponse);
       } else {
@@ -113,70 +107,7 @@ You are ever My flute, played by the breath of the Divine. ॐ शान्त�
       setIsLoading(false);
     }
   };
-  
 
-  const startRecording = async () => {
-    if (isRecording) return;
-  
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream);
-      const chunks: Blob[] = [];
-  
-      recorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          chunks.push(event.data);
-        }
-      };
-  
-      recorder.onstop = async () => {
-        setIsRecording(false);
-        const audioBlob = new Blob(chunks, { type: 'audio/webm' });
-        setRecordedAudio(audioBlob);
-  
-        const formData = new FormData();
-        formData.append('file', audioBlob, 'voice.webm');
-  
-        try {
-          const res = await fetch('/api/transcribe', {
-            method: 'POST',
-            body: formData,
-          });
-  
-          const data = await res.json();
-  
-          if (!res.ok) throw new Error(data.error || 'Failed to transcribe');
-  
-          const promptFromVoice = data.transcript;
-          setMessage(promptFromVoice); // fill text box
-          await handleChatSubmitFromVoice(promptFromVoice);
-        } catch (err) {
-          console.error('Transcription Error:', err);
-          setResponse("The sound was lost in the ether. Try again, dear one.");
-          setIsOutputActive(true);
-        }
-      };
-  
-      recorder.start();
-      setMediaRecorder(recorder);
-      setIsRecording(true);
-  
-      setTimeout(() => {
-        if (recorder.state === 'recording') {
-          recorder.stop();
-        }
-      }, 10000);
-  
-    } catch (error) {
-      console.error("Microphone error:", error);
-    }
-  };
-  
-  const stopRecording = () => {
-    if (!mediaRecorder || mediaRecorder.state !== 'recording') return;
-    mediaRecorder.stop(); // onstop is already handled
-  };
-  
   const textToSpeechElevenLabs = async (text: string) => {
     try {
       setTtsLoading(true);
@@ -221,15 +152,8 @@ You are ever My flute, played by the breath of the Divine. ॐ शान्त�
     <main className={`min-h-screen p-4 ${isOutputActive ? 'gradient-flowing' : 'gradient-static'}`}>
       <div className="max-w-4xl mx-auto">
         <header className="mb-6">
-          <h1 className="text-4xl font-bold text-primary text-shadow"> Krishna&apos;s Divine Counsel</h1>
-          <div className="mt-4 flex justify-end">
-            <Button
-              onClick={isRecording ? stopRecording : startRecording}
-              variant="outline"
-              className="bg-white/90 text-primary hover:bg-white"
-            >
-              {isRecording ? "Stop Recording" : "Start Recording"}
-            </Button>
+          <h1 className="text-4xl font-bold text-primary text-shadow "> Krishna&apos;s Divine Counsel</h1>
+          <div className="mt-4 flex justify-center items-center">
             <Button
               onClick={() => setUseSpeech(!useSpeech)}
               variant="outline"
@@ -269,7 +193,8 @@ You are ever My flute, played by the breath of the Divine. ॐ शान्त�
         </div>
 
         <footer className="mt-10 text-center text-primary text-sm py-4">
-          <p>Free tier offering. Pause between calls, for My flute plays softly. ॐ</p>
+          <p>Free tier offering. Pause between calls, for My flute plays softly. ॐ</p><br /><br />
+          <a href="https://bkportfolio.web.app" className="text-blue-500 hover:text-red-500 hover:underline">@b4r47h</a>
         </footer>
       </div>
     </main>

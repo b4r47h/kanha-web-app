@@ -14,8 +14,8 @@ interface ChatFormProps {
 
 export function ChatForm({ onSubmit, isLoading, message, setMessage, response }: ChatFormProps) {
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-semibold">Seek Divine Guidance</h2>
+    <div className="space-y-4 ">
+      <h2 className="text-2xl font-semibold justify-centre">Seek Divine Guidance</h2>
       <div className="flex gap-2">
         <Input
           value={message}
@@ -24,10 +24,10 @@ export function ChatForm({ onSubmit, isLoading, message, setMessage, response }:
           className="bg-white/90"
           disabled={isLoading}
         />
-        <Button 
+        <Button
           onClick={onSubmit}
           disabled={isLoading || !message.trim()}
-          className="bg-accent text-white hover:bg-accent/90"
+          className="bg-gradient-to-r from-indigo-600 to-violet-700 text-primary hover:opacity-90 ml-4"
         >
           {isLoading ? (
             <>
@@ -38,6 +38,7 @@ export function ChatForm({ onSubmit, isLoading, message, setMessage, response }:
             'Ask'
           )}
         </Button>
+
       </div>
       {response && (
         <div className="output-box whitespace-pre-line">
