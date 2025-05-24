@@ -8,13 +8,11 @@ https://kanha-app.vercel.app/
 
 ## ✨ Features
 
-- 🎙️ **Voice Input & Output**: Record your question to Krishna or hear his reply via ElevenLabs TTS.
 - 📜 **Divine Responses**: Krishna replies with formatted, poetic spiritual guidance.
 - 🎨 **Modern UI**: Styled with Tailwind CSS & shadcn/ui.
 - 🧠 **OpenAI-powered**: Queries are answered via a GPT-powered API (GROQ-compatible).
 - ⚙️ **Client & Server Components**: Optimized using Next.js 14 features.
 - 🧪 **ESLint + TypeScript**: Ensures best practices and type safety.
-- 🪄 **Auto-expanding UI**: Replies animate and expand post TTS playback.
 
 ---
 
