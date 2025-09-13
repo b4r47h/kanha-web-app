@@ -1,7 +1,8 @@
 # 🕉️ Krishna's Divine Counsel
 
-A poetic AI chat and audio experience with Krishna as your guide. Built using modern web technologies with integrated ElevenLabs TTS, audio recording(broken), and beautifully styled UI.
+A poetic AI chat and audio experience with Krishna as your guide. Built using modern web technologies with integrated ElevenLabs TTS.styled UI.
 
+Indulge in the selfless journey to Vaikunda.
 https://kanha-app.vercel.app/
 
 ---
@@ -9,10 +10,7 @@ https://kanha-app.vercel.app/
 ## ✨ Features
 
 - 📜 **Divine Responses**: Krishna replies with formatted, poetic spiritual guidance.
-- 🎨 **Modern UI**: Styled with Tailwind CSS & shadcn/ui.
-- 🧠 **OpenAI-powered**: Queries are answered via a GPT-powered API (GROQ-compatible).
-- ⚙️ **Client & Server Components**: Optimized using Next.js 14 features.
-- 🧪 **ESLint + TypeScript**: Ensures best practices and type safety.
+
 
 ---
 
