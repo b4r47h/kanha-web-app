@@ -27,7 +27,7 @@ export function ChatForm({ onSubmit, isLoading, message, setMessage, response }:
         <Button
           onClick={onSubmit}
           disabled={isLoading || !message.trim()}
-          className="bg-gradient-to-r from-indigo-600 to-violet-700 text-primary hover:opacity-90 ml-4"
+          className="bg-gradient-to-r from-indigo-600 to-violet-600 text-primary hover:opacity-90 ml-4"
         >
           {isLoading ? (
             <>

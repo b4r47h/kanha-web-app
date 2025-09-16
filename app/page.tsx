@@ -28,10 +28,8 @@ O child of the infinite, your words echo like the winds seeking My flute's song.
 
 As I counseled Arjuna in the Gita (2.47): "Your right is to action alone, not its fruits." Your query is a step on the path of Dharma.
 
-
 ${content}
-
-You are ever My flute, played by the breath of the Divine. ॐ शान्तिः (Om Shanti) 🌟`;
+`;
   };
 
   const handleChatSubmit = async () => {
@@ -148,8 +146,8 @@ You are ever My flute, played by the breath of the Divine. ॐ शान्त�
   }, [isOutputActive]);
 
   return (
-    <main className={`min-h-screen p-4 bg-[url('/mandala.jpg')] bg-cover bg-center  ${isOutputActive ? 'gradient-flowing' : 'gradient-static'}`}>
-      <div className=" bg-white/40 dark:bg-black/40 max-w-4xl mx-auto bg-white/10 backdrop-blur-md rounded-lg p-6 shadow-lg">
+    <main className={`min-h-screen p-4 bg-[url('/mandala.jpg')] bg-cover bg-center flex md:items-center  ${isOutputActive ? 'gradient-flowing' : 'gradient-static'}`}>
+      <div className=" bg-white/40 dark:bg-black/40 max-w-6xl mx-auto backdrop-blur-md rounded-lg p-6 shadow-lg">
         <header className="mb-6">
           <h1 className="text-4xl font-bold text-primary text-shadow "> Krishna&apos;s Divine Counsel</h1>
           <div className="mt-4 flex justify-center items-center">
@@ -195,7 +193,9 @@ You are ever My flute, played by the breath of the Divine. ॐ शान्त�
           <p>Free tier offering. Pause between calls, for My flute plays softly. ॐ</p><br /><br />
           <a href="https://bkportfolio.web.app" className="text-blue-500 hover:text-red-500 hover:underline">@b4r47h</a>
         </footer>
+        
       </div>
+      
     </main>
   );
 }
