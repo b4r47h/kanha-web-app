@@ -18,13 +18,14 @@ export async function POST(req: Request) {
     },
     body: JSON.stringify({
       text,
-      model_id: 'eleven_multilingual_v2',
+      model_id: 'eleven_flash_v2.5',
       voice_settings: {
-        stability: 0.75,
-        similarity_boost: 0.75,
-        style: 0.8,
-        speed: 0.9,
+        stability: 0.5,
+        similarity_boost: 0.5,
+        style: 0.0,
+        speed: 1.0,
       },
+      optimize_streaming_latency: true,
     }),
   });
 
@@ -38,6 +39,7 @@ export async function POST(req: Request) {
   return new NextResponse(Buffer.from(buffer), {
     headers: {
       'Content-Type': 'audio/mpeg',
+      'Transfer-Encoding': 'chunked',
     },
   });
 }

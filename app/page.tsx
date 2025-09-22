@@ -146,22 +146,21 @@ ${content}
   }, [isOutputActive]);
 
   return (
-    <main className={`min-h-screen p-4 bg-[url('/mandala.jpg')] bg-cover bg-center flex md:items-center  ${isOutputActive ? 'gradient-flowing' : 'gradient-static'}`}>
-      <div className=" bg-white/40 dark:bg-black/40 max-w-6xl mx-auto backdrop-blur-md rounded-lg p-6 shadow-lg">
-        <header className="mb-6">
-          <h1 className="text-4xl font-bold text-primary text-shadow "> Krishna&apos;s Divine Counsel</h1>
+    <main className="min-h-screen pt-6 flex md:p-12">
+      <div className="mx-auto py-4 px-4 md:py-16 flex flex-col items-stretch justify-between">
+        
+        <header className="mb-6 ">
+          <h1 className="md:text-4xl text-3xl font-bold text-center"> Krishna&apos;s Divine Counsel</h1>
           <div className="mt-4 flex justify-center items-center">
             <Button
               onClick={() => setUseSpeech(!useSpeech)}
-              variant="outline"
-              className="bg-white/90 text-primary hover:bg-white ml-4"
+              variant="ghost"
+              className="rounded-full bg-gradient-to-r from-purple-700 via-transparent to-amber-800 animate-pulse"
             >
               {useSpeech ? 'Switch to Text' : 'Switch to Speech'}
             </Button>
           </div>
         </header>
-
-        <Separator className="my-6 bg-white/30" />
 
         <div className="space-y-8">
           <ChatForm
@@ -177,10 +176,10 @@ ${content}
           )}
 
           {response && (
-            <div className="text-right mt-4">
+            <div className="text-right mt-4 mb-8">
               <Button
                 variant="ghost"
-                className="text-white/80 text-sm underline"
+                className="text-white/80 text-sm underline rounded-full w-full"
                 onClick={() => setIsExpanded((prev) => !prev)}
               >
                 {isExpanded ? 'Collapse' : 'Expand'} Response
@@ -189,9 +188,9 @@ ${content}
           )}
         </div>
 
-        <footer className="mt-10 text-center text-primary text-sm py-4">
+        <footer className="text-center text-gray-600 text-sm pt-4">
           <p>Free tier offering. Pause between calls, for My flute plays softly. ॐ</p><br /><br />
-          <a href="https://bkportfolio.web.app" className="text-blue-500 hover:text-red-500 hover:underline">@b4r47h</a>
+          <a href="https://bkportfolio.web.app" className="text-yellow-400 hover:text-red-500 hover:underline">@b4r47h</a>
         </footer>
         
       </div>

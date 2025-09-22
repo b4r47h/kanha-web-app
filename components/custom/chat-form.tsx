@@ -14,20 +14,20 @@ interface ChatFormProps {
 
 export function ChatForm({ onSubmit, isLoading, message, setMessage, response }: ChatFormProps) {
   return (
-    <div className="space-y-4 ">
-      <h2 className="text-2xl font-semibold justify-centre">Seek Divine Guidance</h2>
-      <div className="flex gap-2">
+    <div className="space-y-4 mt-12 ">
+      <h2 className="text-2xl font-semibold text-center text-gray-400 mb-8">Seek Divine Guidance</h2>
+      <div className="flex gap-4 flex-col items-center">
         <Input
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Ask Krishna for guidance..."
-          className="bg-white/90"
+          className="bg-gradient-to-r from-indigo-600 via-yellow-700 to-violet-600 rounded-full w-full p-8"
           disabled={isLoading}
         />
         <Button
           onClick={onSubmit}
           disabled={isLoading || !message.trim()}
-          className="bg-gradient-to-r from-indigo-600 to-violet-600 text-primary hover:opacity-90 ml-4"
+          className="bg-gradient-radial from-red-600 via-indigo-700 to-violet-600 text-yellow-100 h-20 w-20 mt-8"
         >
           {isLoading ? (
             <>
@@ -35,13 +35,13 @@ export function ChatForm({ onSubmit, isLoading, message, setMessage, response }:
               Seeking...
             </>
           ) : (
-            'Ask'
+            'Seek'
           )}
         </Button>
 
       </div>
       {response && (
-        <div className="output-box whitespace-pre-line">
+        <div className="whitespace-pre-line">
           {response}
         </div>
       )}
