@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { ChatForm } from '@/components/custom/chat-form';
 
-
 export default function Home() {
   const [message, setMessage] = useState('');
   const [response, setResponse] = useState('');
@@ -17,24 +16,20 @@ export default function Home() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
-
-
   const MIN_REQUEST_INTERVAL = 5000;
 
   const formatKrishnaResponse = (content: string) => {
-    return `
-
-O child of the infinite, your words echo like the winds seeking My flute's song. I hear your soul's murmur.
+    return `O child of the infinite, your words echo like the winds seeking My flute's song. I hear your soul's murmur.
 
 As I counseled Arjuna in the Gita (2.47): "Your right is to action alone, not its fruits." Your query is a step on the path of Dharma.
 
-${content}
-`;
+${content}`;
   };
 
   const handleChatSubmit = async () => {
     if (!message.trim()) {
       setResponse("Ask Me something first, dear one.");
+      setIsExpanded(true);
       return;
     }
 
@@ -53,12 +48,15 @@ ${content}
 
       const krishnaResponse = formatKrishnaResponse(data.message);
       setResponse(krishnaResponse);
-      setIsExpanded(false); // hide text while speaking
       setIsOutputActive(true);
 
       if (useSpeech) {
+        // In speech mode: hide text initially, play audio, then show text
+        setIsExpanded(false);
         await textToSpeechElevenLabs(krishnaResponse);
+        // Text will be shown after audio ends via audio.onended
       } else {
+        // In text mode: show response immediately
         setIsExpanded(true);
       }
     } catch (error) {
@@ -87,10 +85,10 @@ ${content}
 
       const krishnaResponse = formatKrishnaResponse(data.message);
       setResponse(krishnaResponse);
-      setIsExpanded(false);
       setIsOutputActive(true);
 
       if (useSpeech) {
+        setIsExpanded(false);
         await textToSpeechElevenLabs(krishnaResponse);
       } else {
         setIsExpanded(true);
@@ -121,16 +119,25 @@ ${content}
 
       audio.onplay = () => {
         setIsSpeaking(true);
+        // Keep text hidden while speaking
         setIsExpanded(false);
       };
 
       audio.onended = () => {
         setIsSpeaking(false);
         setTtsLoading(false);
+        // Show text after audio finishes
         setIsExpanded(true);
       };
 
-      audio.play();
+      audio.onerror = () => {
+        console.error('Audio playback error');
+        setIsSpeaking(false);
+        setTtsLoading(false);
+        setIsExpanded(true);
+      };
+
+      await audio.play();
     } catch (error) {
       console.error('TTS Error:', error);
       setTtsLoading(false);
@@ -149,16 +156,31 @@ ${content}
     <main className="min-h-screen pt-6 flex md:p-12">
       <div className="mx-auto py-4 px-4 md:py-16 flex flex-col items-stretch justify-between">
         
-        <header className="mb-6 ">
-          <h1 className="md:text-4xl text-3xl font-bold text-center"> Krishna&apos;s Divine Counsel</h1>
-          <div className="mt-4 flex justify-center items-center">
+        <header className="mb-6">
+          <h1 className="md:text-4xl text-3xl font-bold text-center">Krishna&apos;s Divine Counsel</h1>
+          <div className="mt-4 flex justify-center items-center flex-col gap-2">
             <Button
               onClick={() => setUseSpeech(!useSpeech)}
               variant="ghost"
-              className="rounded-full bg-gradient-to-r from-purple-700 via-transparent to-amber-800 animate-pulse"
+              className={`rounded-full bg-gradient-to-r from-purple-700 via-transparent to-amber-800 ${useSpeech ? 'animate-pulse' : ''}`}
             >
               {useSpeech ? 'Switch to Text' : 'Switch to Speech'}
             </Button>
+            
+            {/* Speech status indicators */}
+            {useSpeech && (
+              <div className="text-center text-sm">
+                {ttsLoading && (
+                  <p className="text-blue-300 animate-pulse">Preparing divine voice... 🌀</p>
+                )}
+                {isSpeaking && (
+                  <p className="text-green-300 animate-pulse">Krishna is speaking... 🎵</p>
+                )}
+                {useSpeech && !ttsLoading && !isSpeaking && (
+                  <p className="text-yellow-300">Speech mode active - Krishna will speak responses</p>
+                )}
+              </div>
+            )}
           </div>
         </header>
 
@@ -171,8 +193,17 @@ ${content}
             response={isExpanded ? response : ''}
           />
 
-          {ttsLoading && (
+          {/* Show different messages based on speech state */}
+          {!useSpeech && ttsLoading && (
             <p className="text-white text-center animate-pulse mt-4">Krishna prepares to speak... 🌀</p>
+          )}
+
+          {useSpeech && response && !isExpanded && !ttsLoading && (
+            <div className="text-center mt-4">
+              <p className="text-blue-300 text-sm animate-pulse">
+                {isSpeaking ? "Listen to Krishna's divine wisdom..." : "Audio response ready"}
+              </p>
+            </div>
           )}
 
           {response && (
@@ -182,8 +213,20 @@ ${content}
                 className="text-white/80 text-sm underline rounded-full w-full"
                 onClick={() => setIsExpanded((prev) => !prev)}
               >
-                {isExpanded ? 'Collapse' : 'Expand'} Response
+                {isExpanded ? 'Collapse' : 'View'} Response {isSpeaking ? '(Playing Audio)' : ''}
               </Button>
+              
+              {/* Additional audio controls in speech mode */}
+              {useSpeech && response && isExpanded && (
+                <Button
+                  variant="ghost"
+                  className="text-blue-300 text-xs mt-2 rounded-full"
+                  onClick={() => textToSpeechElevenLabs(response)}
+                  disabled={ttsLoading || isSpeaking}
+                >
+                  🔊 Play Again
+                </Button>
+              )}
             </div>
           )}
         </div>
@@ -192,9 +235,7 @@ ${content}
           <p>Free tier offering. Pause between calls, for My flute plays softly. ॐ</p><br /><br />
           <a href="https://bkportfolio.web.app" className="text-yellow-400 hover:text-red-500 hover:underline">@b4r47h</a>
         </footer>
-        
       </div>
-      
     </main>
   );
 }
